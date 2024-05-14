@@ -1,29 +1,47 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
+const calculateResult = (expression) => {
+  try {
+    if (expression.includes('/0')) {
+      throw new Error('Division by zero');
+    }
+    const result = eval(expression);
+    if (isNaN(result) || !isFinite(result)) {
+      throw new Error('Invalid expression');
+    }
+    return result.toString();
+  } catch (error) {
+    return 'Error';
+  }
+};
+
 export default function App() {
   const [displayValue, setDisplayValue] = useState('');
 
   const handleButtonPress = (buttonText) => {
-    if (!isNaN(parseInt(buttonText))) {
-      // Numeric button clicked
-      setDisplayValue(displayValue + buttonText);
-    } else if (buttonText === '=') {
-      // Equals button clicked
-      // Implement calculation logic
-    } else if (buttonText === 'C') {
-      // Clear button clicked
-      setDisplayValue('');
-    } else {
-      // Operator button clicked
-      // Implement operator logic
-      setDisplayValue(displayValue + buttonText);
+    switch (buttonText) {
+      case 'C':
+        setDisplayValue('');
+        break;
+      case '←':
+        setDisplayValue(displayValue.slice(0, -1));
+        break;
+      case '=':
+        setDisplayValue(calculateResult(displayValue));
+        break;
+      case '%':
+        setDisplayValue((parseFloat(displayValue) / 100).toString());
+        break;
+      default:
+        setDisplayValue(displayValue + buttonText);
+        break;
     }
   };
 
   const buttonRows = [
-    ['C', '%', '/', 'x'],
-    ['7', '8', '9', '*'],
+    ['C', '%', '÷', '×'],
+    ['7', '8', '9', '×'],
     ['4', '5', '6', '-'],
     ['1', '2', '3', '+'],
     ['0', '00', '.', '='],
@@ -64,7 +82,6 @@ const styles = StyleSheet.create({
   calculator: {
     width: '80%',
     padding: 20,
-    backgroundColor: '#ffffff',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -87,12 +104,12 @@ const styles = StyleSheet.create({
   },
   buttonGrid: {
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
   button: {
@@ -102,10 +119,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#009688',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 5,
   },
   buttonText: {
     color: '#ffffff',
     fontSize: 24,
   },
 });
+
