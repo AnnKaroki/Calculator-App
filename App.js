@@ -1,7 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-
 export default function App() {
   const [displayValue, setDisplayValue] = useState('');
 
@@ -21,6 +17,14 @@ export default function App() {
     }
   };
 
+  // Array of buttons to display
+  const buttons = [
+    '1', '2', '3', '+',
+    '4', '5', '6', '-',
+    '7', '8', '9', '*',
+    'C', '0', '=', '/',
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.calculator}>
@@ -28,65 +32,18 @@ export default function App() {
           <Text style={styles.displayText}>{displayValue}</Text>
         </View>
         <View style={styles.buttonGrid}>
-          <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('1')}>
-            <Text style={styles.buttonText}>1</Text>
-          </TouchableOpacity>
-          {/* Add more buttons similarly */}
+          {/* Mapping over buttons array to generate buttons */}
+          {buttons.map((buttonText, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.button}
+              onPress={() => handleButtonPress(buttonText)}>
+              <Text style={styles.buttonText}>{buttonText}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  calculator: {
-    width: 300,
-    margin: 'auto',
-    padding: 20,
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  display: {
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    textAlign: 'right',
-  },
-  displayText: {
-    fontSize: 24,
-  },
-  buttonGrid: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  button: {
-    width: '23%', // Adjust as per your preference
-    padding: 15,
-    borderRadius: 5,
-    backgroundColor: '#009688',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 18,
-  },
-});
