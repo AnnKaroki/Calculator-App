@@ -12,8 +12,14 @@ const calculateResult = (expression) => {
     }
     return result.toString();
   } catch (error) {
-    return 'Error';
-  }
+    if(error.message === 'Division by zero'){
+      return 'Cannot divide by zero';
+    } else if(error.message === 'Invalid expression'){
+      return 'Invalid expression';
+    } else{
+      return 'An error occured'
+    }
+    }
 };
 
 export default function App() {
